@@ -41,12 +41,12 @@ class DeepDream(tf.Module):
             with tf.GradientTape() as tape:
                 tape.watch(image)
                 out = self.model(image)
-                losses = []
+                loss = tf.constant(0.0, dtype=tf.float32)
                 if len(out) == 1:
-                    out = [out]
-                for x in out:
-                    losses.append(tf.norm(x, ord="euclidean"))
-                loss = tf.reduce_sum(out)
+                    loss += tf.norm(out, ord="euclidean")
+                else:
+                    for x in out:
+                        loss += tf.norm(x, ord="euclidean")
             grads = tape.gradient(loss, image)
 
             sigma = (tf.cast(n, tf.float32) * 2.0) / iterations_float + 0.5
@@ -102,13 +102,25 @@ def parse_args() -> argparse.Namespace:
     _default_output_dir = os.path.dirname(os.path.abspath(__file__))
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_image", type=str, required=True, help="Path to an input image")
-    parser.add_argument("--output_dir", type=str, default=_default_output_dir, help="Path to a directory where the output will be saved.")
-    parser.add_argument("--layer_names", default=["mixed3", "mixed5"], nargs="+", help="Layer at which we modify image to maximize outputs")
-    parser.add_argument("--lr", default=0.01, type=float, help="Learning rate")
-    parser.add_argument("--octave_scale", default=0.75, type=float, help="Image scale between octaves")
-    parser.add_argument("--num_octaves", default=None, type=int, help="Number of octaves; How many downsampling to do and apply DeepDream."
-                                                                      "Default determines the maximal num octaves.")
-    parser.add_argument("--iterations", default=10, type=int, help="Number of Gradient Ascent steps per octave")
+    parser.add_argument("--output_dir", type=str, default=_default_output_dir,
+                        help="Path to a directory where the output will be saved.\n"
+                             "Default: Same directory in 'outputs' dir.")
+    parser.add_argument("--layer_names", default=["mixed3", "mixed5"], nargs="+",
+                        help="Layer at which we modify image to maximize outputs.\n"
+                             "Choose either: 'mixed0', 'mixed1', ...,'mixed10' or a combination of them.\n"
+                             "Default: ['mixed3', 'mixed5']")
+    parser.add_argument("--lr", default=0.01, type=float,
+                        help="Learning rate.\n"
+                             "Default: 0.01")
+    parser.add_argument("--octave_scale", default=0.75, type=float,
+                        help="Image scale between octaves.\n"
+                             "Default: 0.75")
+    parser.add_argument("--num_octaves", default=None, type=int,
+                        help="Number of octaves; How many downsampling to do and apply DeepDream.\n"
+                             "Default determines the maximal num octaves possible.")
+    parser.add_argument("--iterations", default=10, type=int,
+                        help="Number of Gradient Ascent steps per octave.\n"
+                             "Default: 10")
     args = parser.parse_args()
 
     if not os.path.exists(args.input_image):  # Make sure it exists.
@@ -138,7 +150,7 @@ def main():
 
     base_model = tf.keras.applications.InceptionV3(include_top=False)  # Our base model
     minimal_height_width = 85  # for InceptionV3 the minimal size for input is (85,85)
-
+    base_model.summary()
     maximal_octave = calculate_maximal_num_octaves(image=image,
                                                    octave_scale=args.octave_scale,
                                                    minimal_height_width=minimal_height_width)
