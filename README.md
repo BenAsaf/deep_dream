@@ -32,5 +32,6 @@ DeepDream using Tensorflow 2.3<br>
 >     
 ![,20%](./examples/gyeongbokgung_palace_seoul_korea.jpg) ![](examples/gyeongbokgung_palace_seoul_korea_mixed3_mixed5_output.jpg)
 ![](./examples/seoul_night.jpg) ![](./examples/seoul_night_mixed0_mixed1_output.jpg)
+![](./examples/jerusalem.jpg) ![](./examples/jerusalem_mixed0_mixed1_mixed2_output.jpg)
 ![](./examples/china2.jpg) ![](./examples/china2_mixed3_mixed5_output.jpg)
 ![](./examples/china1.jpg) ![](./examples/china1_mixed3_mixed5_output.jpg)
