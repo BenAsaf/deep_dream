@@ -107,7 +107,7 @@ def parse_args() -> argparse.Namespace:
                              "Default: Same directory in 'outputs' dir.")
     parser.add_argument("--layer_names", default=["mixed3", "mixed5"], nargs="+",
                         help="Layer at which we modify image to maximize outputs.\n"
-                             "Choose either: 'mixed0', 'mixed1', ...,'mixed10' or a combination of them.\n"
+                             "Choose either: 'mixed0', 'mixed1', ...,'mixed10' or any combination of them.\n"
                              "Default: ['mixed3', 'mixed5']")
     parser.add_argument("--lr", default=0.01, type=float,
                         help="Learning rate.\n"

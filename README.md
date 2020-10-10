@@ -14,7 +14,7 @@ DeepDream using Tensorflow 2.3<br>
 >                             Default: Same directory in 'outputs' dir.
 >       --layer_names LAYER_NAMES [LAYER_NAMES ...]
 >                             Layer at which we modify image to maximize outputs.
->                             Choose either: 'mixed0', 'mixed1', ...,'mixed10'.
+>                             Choose either: 'mixed0', 'mixed1', ...,'mixed10' or any combination of them.
 >                             Default: ['mixed3', 'mixed5']
 >       --lr LR               Learning rate
 >                             Default: 0.01
@@ -33,5 +33,4 @@ DeepDream using Tensorflow 2.3<br>
 ![,20%](./examples/gyeongbokgung_palace_seoul_korea.jpg) ![](examples/gyeongbokgung_palace_seoul_korea_mixed3_mixed5_output.jpg)
 ![](./examples/seoul_night.jpg) ![](./examples/seoul_night_mixed0_mixed1_output.jpg)
 ![](./examples/jerusalem.jpg) ![](./examples/jerusalem_mixed0_mixed1_mixed2_output.jpg)
-![](./examples/china2.jpg) ![](./examples/china2_mixed3_mixed5_output.jpg)
-![](./examples/china1.jpg) ![](./examples/china1_mixed3_mixed5_output.jpg)
+![](./examples/eilat.jpg) ![](./examples/eilat_mixed0_mixed1_mixed2_mixe3_mixed4_mixed5output.jpg)
