@@ -173,7 +173,7 @@ def main():
     )
 
     # Save and plot image
-    filename, ext = os.path.splitext(args.input_image.split("/")[-1])
+    filename, ext = os.path.splitext(os.path.basename(args.input_image))
     dd_utils.save_image(image=dreamed_image, path=os.path.join(args.output_dir, f"{filename}_output{ext}"))
 
 
