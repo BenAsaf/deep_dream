@@ -150,7 +150,7 @@ def main():
 
     base_model = tf.keras.applications.InceptionV3(include_top=False)  # Our base model
     minimal_height_width = 85  # for InceptionV3 the minimal size for input is (85,85)
-    base_model.summary()
+    # base_model.summary()
     maximal_octave = calculate_maximal_num_octaves(image=image,
                                                    octave_scale=args.octave_scale,
                                                    minimal_height_width=minimal_height_width)

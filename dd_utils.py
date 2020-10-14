@@ -33,7 +33,7 @@ def process_image(image: tf.Tensor):
 @tf.function(input_signature=[tf.TensorSpec(shape=[None, None, None, 3], dtype=tf.float32)])
 def deprocess_image(image: tf.Tensor):
     out = tf.squeeze(image)
-    out = out[:, :, ::-1]
+    out = out[:, :, ::-1]  # BGR->RGB
     out += 1.0  # [-1,1]->[0,2]
     out /= 2.0  # [0,2]->[0,1]
     out *= 255.0  # [0,1]->[0,255]
@@ -53,19 +53,19 @@ def gaussian_blur(image: tf.Tensor, kernel_size: int = 9, sigma: float = 0.5):
         xx, yy = tf.meshgrid(ax, ax)
         kernel = tf.exp(-(xx ** 2 + yy ** 2) / (2.0 * sigma ** 2))
         kernel = kernel / tf.reduce_sum(kernel)
-        kernel = tf.tile(kernel[..., tf.newaxis], [1, 1, num_channels])
+        kernel = tf.reshape(kernel, (kernel_size, kernel_size, 1, 1))
+        kernel = tf.tile(kernel, [1, 1, num_channels, 1])
         return kernel
 
     kernel_size = tf.cast(kernel_size, tf.float32)
     gaussian_kernel = gauss_kernel(num_channels=tf.shape(image)[-1], kernel_size=kernel_size, sigma=sigma)
-    gaussian_kernel = gaussian_kernel[..., tf.newaxis]
     result = tf.nn.depthwise_conv2d(image, gaussian_kernel, [1, 1, 1, 1], padding='SAME', data_format='NHWC')
     return result
 
 
 # @tf.function
 def resize_image(image: tf.Tensor, factor: Union[float, List[float]] = None, size: Tuple[int, int] = None,
-                 resize_method: tf.image.ResizeMethod = tf.image.ResizeMethod.LANCZOS3, antialias: bool = True):
+                 resize_method: tf.image.ResizeMethod = tf.image.ResizeMethod.LANCZOS5, antialias: bool = False):
     if size is not None:
         size = size  # just so it's clear
     elif factor is not None:
