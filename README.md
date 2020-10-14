@@ -29,7 +29,10 @@ DeepDream using Tensorflow 2.3<br>
 >                             Number of Gradient Ascent steps per octave.
 >                             Default: 10
 >
->     
+>
+## Examples
+Checkout the file names for what intermediate layers were used.<br>
+
 ![,20%](./examples/gyeongbokgung_palace_seoul_korea.jpg) ![](examples/gyeongbokgung_palace_seoul_korea_mixed3_mixed5_output.jpg)
 ![](./examples/seoul_night.jpg) ![](./examples/seoul_night_mixed0_mixed1_output.jpg)
 ![](./examples/jerusalem.jpg) ![](./examples/jerusalem_mixed0_mixed1_mixed2_output.jpg)
