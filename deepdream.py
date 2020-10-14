@@ -36,7 +36,7 @@ class DeepDream(tf.Module):
     )
     def __call__(self, image: tf.Tensor, iterations: int, lr: float):
         """ Updates the image to maximize outputs for n iterations """
-        iterations_float = tf.cast(iterations, dtype=tf.float32)
+        num_iterations_float = tf.cast(iterations, dtype=tf.float32)
         for n in tf.range(iterations):
             with tf.GradientTape() as tape:
                 tape.watch(image)
@@ -49,7 +49,7 @@ class DeepDream(tf.Module):
                         loss += tf.norm(x, ord="euclidean")
             grads = tape.gradient(loss, image)
 
-            sigma = (tf.cast(n, tf.float32) * 2.0) / iterations_float + 0.5
+            sigma = (tf.cast(n, tf.float32) * 2.0) / num_iterations_float + 0.5
             grad_smooth1 = dd_utils.gaussian_blur(grads, kernel_size=9, sigma=sigma)
             grad_smooth2 = dd_utils.gaussian_blur(grads, kernel_size=9, sigma=sigma * 2)
             grad_smooth3 = dd_utils.gaussian_blur(grads, kernel_size=9, sigma=sigma * 0.5)
@@ -87,7 +87,7 @@ def deep_dream(image: np.array,
 
     dreamed_image = image
     details = tf.zeros_like(octaves[-1])
-    for octave_idx, octave_base in enumerate(tqdm(octaves[::-1])):
+    for octave_idx, octave_base in enumerate(tqdm(octaves[::-1], desc="Octaves")):
         if octave_idx > 0:
             details = dd_utils.resize_image(image=details, size=octave_base.shape[1:3], resize_method=resize_method,
                                             antialias=antialias)
